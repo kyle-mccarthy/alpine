@@ -1,0 +1,13 @@
+[package]
+name = "alpine"
+version = "0.1.0"
+authors = ["Kyle McCarthy <km@kylemccarthy.io>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+arrow = { git = "https://github.com/kyle-mccarthy/arrow", default-features = false }
+snafu = "0.5.0"
+bstr = "0.2"
+unicase = "2.5.1"
