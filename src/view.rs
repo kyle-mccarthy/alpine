@@ -44,6 +44,12 @@ impl View {
         self.get_index(index).is_some()
     }
 
+    pub fn full_index(&self, column: &Column) -> Option<(usize, &Field)> {
+        let index = self.get_index(column)?;
+        let field = &self.fields[index];
+        Some((index, field))
+    }
+
     pub fn fields(&self) -> &Vec<Field> {
         &self.fields
     }
