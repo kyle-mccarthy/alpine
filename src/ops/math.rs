@@ -44,29 +44,38 @@ macro_rules! do_op {
 }
 
 pub fn add<T: ArrowNumericType>(
-    lhs: PrimitiveArray<T>,
-    rhs: PrimitiveArray<T>,
+    lhs: &PrimitiveArray<T>,
+    rhs: &PrimitiveArray<T>,
 ) -> Result<ArrayRef, Error> {
     array_op!(lhs, rhs, add, "add")
 }
 
 pub fn subtract<T: ArrowNumericType>(
-    lhs: PrimitiveArray<T>,
-    rhs: PrimitiveArray<T>,
+    lhs: &PrimitiveArray<T>,
+    rhs: &PrimitiveArray<T>,
 ) -> Result<ArrayRef, Error> {
     array_op!(lhs, rhs, subtract, "subtract")
 }
 
 pub fn divide<T: ArrowNumericType>(
-    lhs: PrimitiveArray<T>,
-    rhs: PrimitiveArray<T>,
+    lhs: &PrimitiveArray<T>,
+    rhs: &PrimitiveArray<T>,
 ) -> Result<ArrayRef, Error> {
     array_op!(lhs, rhs, divide, "divide")
 }
 
 pub fn multiply<T: ArrowNumericType>(
-    lhs: PrimitiveArray<T>,
-    rhs: PrimitiveArray<T>,
+    lhs: &PrimitiveArray<T>,
+    rhs: &PrimitiveArray<T>,
 ) -> Result<ArrayRef, Error> {
     array_op!(lhs, rhs, multiply, "multiply")
 }
+
+// pub fn modulo<T: ArrowNumericType>(
+//     lhs: PrimitiveArray<T>,
+//     rhs: PrimitiveArray<T>,
+// ) -> Result<ArrayRef, Error> {
+//     compute::math_op(&lhs, &rhs, |l, r| Ok(l % r))
+//         .map(|arr| Arc::new(arr) as ArrayRef)
+//         .map_err(|err| err.into())
+// }
