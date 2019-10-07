@@ -45,6 +45,7 @@ impl Display for Column {
     }
 }
 
+#[allow(dead_code)]
 pub struct CompiledColumn {
     name: String,
     index: usize,
