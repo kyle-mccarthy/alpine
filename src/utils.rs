@@ -1,8 +1,7 @@
-use arrow::array::ArrayRef;
 use arrow::datatypes::DataType;
 
-pub fn is_numeric_type(arr: &ArrayRef) -> bool {
-    match arr.data_type() {
+pub fn is_numeric_type(dt: &DataType) -> bool {
+    match dt {
         DataType::Int8
         | DataType::Int16
         | DataType::Int32
@@ -17,8 +16,8 @@ pub fn is_numeric_type(arr: &ArrayRef) -> bool {
     }
 }
 
-pub fn is_temporal_type(arr: &ArrayRef) -> bool {
-    match arr.data_type() {
+pub fn is_temporal_type(dt: &DataType) -> bool {
+    match dt {
         DataType::Timestamp(_)
         | DataType::Date32(_)
         | DataType::Date64(_)
@@ -27,6 +26,6 @@ pub fn is_temporal_type(arr: &ArrayRef) -> bool {
     }
 }
 
-pub fn is_arrow_numeric_type(arr: &ArrayRef) -> bool {
-    is_numeric_type(&arr) || is_temporal_type(&arr)
-}
+// pub fn is_arrow_numeric_type(arr: &ArrayRef) -> bool {
+//     is_numeric_type(&arr) || is_temporal_type(&arr)
+// }
