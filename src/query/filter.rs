@@ -132,7 +132,7 @@ fn filter_cols(
 macro_rules! apply_filter {
     ($arr:ident, $bool_arr:ident, $( [$dt:path, $ty:ty] ),*) => {
         match $arr.data_type() {
-            $(($dt) => arrow_filter(as_array!($arr, PrimitiveArray<$ty>).unwrap(), $bool_arr),)+
+            $($dt => arrow_filter(as_array!($arr, PrimitiveArray<$ty>).unwrap(), $bool_arr),)+
              missing_impl => unimplemented!(
                 "filter has not yet been implemented for arrays of type {:?}",
                 missing_impl),
@@ -246,24 +246,19 @@ fn filter_scalar<'a>(
 #[cfg(test)]
 mod test_filter {
     use super::*;
-    use crate::{DataType, Field, View};
+    use crate::{array, view, DataType, Field, View};
     use arrow::array::UInt8Array;
+    use arrow::datatypes as dt;
     use std::sync::Arc;
 
     #[test]
     fn it_filters() {
-        let a_col = Field::new("a", DataType::UInt8, false);
-        let b_col = Field::new("b", DataType::UInt8, false);
+        let view = view!(
+            ["a", dt::UInt8Type, [2, 4, 5, 8, 10]],
+            ["b", dt::UInt8Type, [2, 4, 6, 8, 10]]
+        );
 
-        let mut a_data = UInt8Array::builder(5);
-        a_data.append_slice(&[2, 4, 5, 8, 10]).unwrap();
-        let a_data = Arc::new(a_data.finish());
-
-        let mut b_data = UInt8Array::builder(5);
-        b_data.append_slice(&[2, 4, 6, 8, 10]).unwrap();
-        let b_data = Arc::new(b_data.finish());
-
-        let view = View::new(vec![a_col, b_col], vec![a_data, b_data]);
+        // let view = View::new(vec![a_col, b_col], vec![a_data, b_data]);
 
         {
             let filtered_view =
@@ -285,12 +280,12 @@ mod test_filter {
             assert_eq!(filtered_view.column(&"a".into()).unwrap().len(), 4);
 
             let a = filtered_view.column(&"a".into()).unwrap();
-            let expected_a: UInt8Array = vec![4, 5, 8, 10].into();
+            let expected_a = array!(dt::UInt8Type, [4, 5, 8, 10]);
             assert_eq!(as_array!(a, UInt8Array).unwrap(), &expected_a);
 
             assert_eq!(filtered_view.column(&"b".into()).unwrap().len(), 4);
             let b = filtered_view.column(&"b".into()).unwrap();
-            let expected_b: UInt8Array = vec![4, 6, 8, 10].into();
+            let expected_b = array!(dt::UInt8Type, [4, 6, 8, 10]);
             assert_eq!(as_array!(b, UInt8Array).unwrap(), &expected_b);
         }
     }
